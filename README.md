@@ -13,8 +13,8 @@ Gather interesting urls with extensions from a given file.
 
 
 # Available Commands
-   $ python divider.py -f myurlfile.txt
-   $ python divider.py -f myurlfile.txt -req=True
+      $ python divider.py -f myurlfile.txt
+      $ python divider.py -f myurlfile.txt -req=True
 
 
 
