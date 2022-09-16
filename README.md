@@ -11,6 +11,13 @@ Gather interesting urls with extensions from a given file.
      Install dependencies:
             pip install -r Requirements.txt     
 
+
+# Available Commands
+   $ python divider.py -f myurlfile.txt
+   $ python divider.py -f myurlfile.txt -req=True
+
+
+
 # Example
     $ cat myUrls.txt
         https://example.com/test/test3
@@ -29,3 +36,4 @@ Gather interesting urls with extensions from a given file.
       -h, --help            show this help message and exit
       -f FILE, --file FILE  Please add target file as argument!
       -req REQUEST, --request Send request for previously generated urls (default=False)!
+
