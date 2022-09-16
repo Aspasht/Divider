@@ -15,3 +15,11 @@ Gather interesting urls with extensions from a given file.
     $ python divider.py -f myUrls.txt
         https://example.com/robots.txt
         https://example.com/sitemap.xml
+    
+# Usage
+    usage: divider.py [-h] -f FILE [-req REQUEST]
+    options:
+      -h, --help            show this help message and exit
+      -f FILE, --file FILE  Please add target file as argument!
+      -req REQUEST, --request REQUEST
+                            Send request for previously generated urls (default=False)!
