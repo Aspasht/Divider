@@ -19,7 +19,7 @@ Gather interesting urls with extensions from a given file.
 # Usage
     usage: divider.py [-h] -f FILE [-req REQUEST]
     options:
-      -h, --help            show this help message and exit
-      -f FILE, --file FILE  Please add target file as argument!
-      -req REQUEST, --request REQUEST
-                            Send request for previously generated urls (default=False)!
+      -h, --help                             show this help message and exit
+      -f FILE, --file FILE                   Please add target file as argument!
+      -req REQUEST, --request REQUEST        Send request for previously generated urls! (Default=False)
+      -greq GREQUEST, --grequest GREQUEST    Send request for previously generated urls using grequest! (Default=False)
