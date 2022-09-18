@@ -37,10 +37,12 @@ Gather interesting urls with extensions from a given file.
       -f FILE, --file FILE                   Please add target file as argument!
       -req REQUEST, --request REQUEST        Send request for previously generated urls! (Default=False)
       -greq GREQUEST, --grequest GREQUEST    Send request for previously generated urls using grequest! (Default=False)
+      -o OUTPUT, --output OUTPU              Save output to a file!
 
 # Commands
     $ python divider.py -f myurls.txt # Grab urls with extensions without sending any requests.
     $ python divider.py -f myurls.txt -req=True # Send normal requests using httpx module
     $ python divider.py -f myurls.txt -greq=True # Send requests using grequests module
         Note: Use grequests flag if your resulting urls are less in number!
+    $ python divider.py -f myurls.txt -req=True -o out.txt # Save output to a file
     

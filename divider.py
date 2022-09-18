@@ -5,13 +5,13 @@ import httpx
 import asyncio
 import re
 
-
 include = [".json", ".txt", ".xml", ".jsp", ".exe", ".config", ".log", ".aspx", ".git", ".config.php", ".php",
            ".old.php", ".rhtml", ".php.sample", ".php}", ".xml.asp", ".cfg.php", "js.aspx", ".new.php", ".inc.html",
            ".jspx", ".mysqli", ".db", ".rsp.php", ".rsp", ".zip.php", ".tar", ".tar.gz", ".sh", ".py"]
 
 urls = []
 unique_urls = []
+output = []
 
 
 def get_target_file():
@@ -31,6 +31,7 @@ def find_unique():
             unique_urls.append(url)
             if (args.request == False):
                 if (args.grequest == False):
+                    output.append(url)
                     print(url)
             else:
                 pass
@@ -42,9 +43,10 @@ async def send_request():
     async with httpx.AsyncClient() as client:
         for url in unique_urls:
             try:
-                response = await client.get(url,follow_redirects=False,timeout=1)
+                response = await client.get(url, follow_redirects=False, timeout=1)
                 if (response.status_code != 400) and (response.status_code != 404) and (response.status_code != 301):
-                    print(f'{url} {response.status_code}')
+                    output.append(url)
+                    print(f'{url} Status:{response.status_code}')
                 else:
                     pass
             except:
@@ -60,22 +62,31 @@ def use_grequests():
     for a, b in zip(rex, list(urls)):
         l.append(b + " " + "Status:" + str(a))
 
-    for item in l:
+    for url in l:
 
-        if not item.endswith("Status:404"):
-            print(item)
+        if not url.endswith("Status:404"):
+            output.append(url)
+            print(url)
         else:
             pass
+
+
+def save_output():
+    with open(args.output, "w") as f:
+        for url in output:
+            f.write(url + "\n")
 
 
 if __name__ == "__main__":
     # Arguments
     parser = argparse.ArgumentParser()
     parser.add_argument("-f", "--file", required=True, help="Please add target file as argument!")
-    parser.add_argument("-req", "--request",type=bool,default=False, required=False,
+    parser.add_argument("-req", "--request", type=bool, default=False, required=False,
                         help="Send request for previously generated urls!")
-    parser.add_argument("-greq", "--grequest",type=bool,default=False, required=False,
+    parser.add_argument("-greq", "--grequest", type=bool, default=False, required=False,
                         help="Send request for previously generated urls using grequest!")
+    parser.add_argument("-o", "--output", default=False, required=False,
+                        help="Save output to a file!")
     args = parser.parse_args()
 
     # Initial start time
@@ -88,11 +99,17 @@ if __name__ == "__main__":
     else:
         pass
 
-    # Check provided flags
+    # Check provided flags to request
     if args.request == True:
         asyncio.run(send_request())
     elif args.grequest == True:
         use_grequests()
+    else:
+        pass
+
+    # save outputs
+    if args.output:
+        save_output()
     else:
         pass
 
