@@ -41,8 +41,8 @@ Gather interesting urls with extensions from a given file.
 
 # Commands
     $ python divider.py -f myurls.txt # Grab urls with extensions without sending any requests.
-    $ python divider.py -f myurls.txt -req=True # Send normal requests using httpx module
-    $ python divider.py -f myurls.txt -greq=True # Send requests using grequests module
+    $ python divider.py -f myurls.txt -req=True # Send normal requests using httpx module.
+    $ python divider.py -f myurls.txt -greq=True # Send requests using grequests module.
         Note: Use grequests flag if your resulting urls are less in number!
-    $ python divider.py -f myurls.txt -req=True -o out.txt # Save output to a file
+    $ python divider.py -f myurls.txt -req=True -o out.txt # Save output to a file.
     
