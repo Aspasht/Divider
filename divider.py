@@ -1,5 +1,7 @@
 import argparse
 import grequests
+import concurrent.futures
+import requests
 from urllib.parse import urlparse
 import time
 import httpx
@@ -42,27 +44,53 @@ def find_unique():
             unique_urls.append(url)
             if not args.request:
                 if not args.grequest:
-                    output.append(url)
-                    print(url)
+                    if args.output:
+                        output.append(url)
+                print(url)
             else:
                 pass
         else:
             pass
 
 
-async def send_request():
-    async with httpx.AsyncClient() as client:
-        for url in unique_urls:
+# async def send_request():
+#     async with httpx.AsyncClient() as client:
+#         for url in unique_urls:
+#             try:
+#                 response = await client.get(url, follow_redirects=True, timeout=1)
+#                 if (response.status_code != 400) and (response.status_code != 404) and (response.status_code != 301):
+#                     output.append(url)
+#                     print(f'{url} Status:{response.status_code}')
+#                 else:
+#                     pass
+#             except:
+#                 pass
+#                 #print(f"[-] Failed to parse {url} !")
+
+
+def load_url(url):
+    response = requests.get(url)
+    code = str(response.status_code)
+    if (response.status_code != 400) and (response.status_code != 404) and (response.status_code != 301):
+        output.append(f'{url} Status:{response.status_code}')
+        print(f'{url} Status:{response.status_code}')
+        # print(output)
+    else:
+        pass
+    # print(f"{res.url} {code}")
+
+
+def send_request():
+    with concurrent.futures.ThreadPoolExecutor(max_workers=10) as executor:
+        future_to_url = {executor.submit(load_url, url): url for url in unique_urls}
+        for future in concurrent.futures.as_completed(future_to_url):
+            url = future_to_url[future]
             try:
-                response = await client.get(url, follow_redirects=True, timeout=1)
-                if (response.status_code != 400) and (response.status_code != 404) and (response.status_code != 301):
-                    output.append(url)
-                    print(f'{url} Status:{response.status_code}')
-                else:
-                    pass
-            except:
-                pass
-                #print(f"[-] Failed to parse {url} !")
+                data = future.result()
+            except Exception as exc:
+                print('%r generated an exception: %s' % (url, exc))
+            else:
+                load_url(url)
 
 
 def use_grequests():
@@ -83,9 +111,10 @@ def use_grequests():
             pass
 
 
-def save_output():
-    with open(args.output, "w") as f:
-        for url in output:
+def save_output(data):
+    filename = args.output
+    with open(filename, "a") as f:
+        for url in data:
             f.write(url + "\n")
 
 
@@ -99,8 +128,8 @@ if __name__ == "__main__":
                         help="Send request for previously generated urls using grequest!")
     parser.add_argument("--fetch", "--fetch", dest="fetch", default=False, required=False,
                         help="Fetch urls using tools like waybackurls and gau {must be preinstalled}! ")
-    parser.add_argument("-o", "--output", dest="output", default=False, required=False,
-                        help="Save output to a file!")
+    parser.add_argument("-o", "--output", required=False,
+                        default=False, help="Save output to a file!")
 
     args = parser.parse_args()
 
@@ -127,7 +156,8 @@ if __name__ == "__main__":
 
     # Check provided flags to request
     if args.request:
-        asyncio.run(send_request())
+        # asyncio.run(send_request())
+        send_request()
     elif args.grequest:
         use_grequests()
     else:
@@ -135,7 +165,7 @@ if __name__ == "__main__":
 
     # save outputs
     if args.output:
-        save_output()
+        save_output(output)
     else:
         pass
 
