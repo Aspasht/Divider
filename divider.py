@@ -11,7 +11,7 @@ from fetchUrls import get_urls, collected_urls
 
 include = [".json", ".txt", ".xml", ".jsp", ".exe", ".config", ".log", ".aspx", ".git", ".config.php", ".php",
            ".old.php", ".rhtml", ".php.sample", ".php}", ".xml.asp", ".cfg.php", "js.aspx", ".new.php", ".inc.html",
-           ".jspx", ".mysqli", ".db", ".rsp.php", ".rsp", ".zip.php", ".tar", ".tar.gz", ".sh", ".py", ".shtml"]
+           ".jspx",".env",".conf",".cnf",".cfg",".cf",".ini",".sys",".plist", ".mysqli", ".db", ".rsp.php", ".rsp", ".zip.php", ".tar", ".tar.gz", ".sh", ".py", ".shtml"]
 
 urls = []
 unique_urls = []
